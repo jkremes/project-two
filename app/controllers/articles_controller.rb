@@ -1,5 +1,7 @@
-class ArticlesController < ApplicationController
-  before_action :set_article, only: [:show, :update, :destroy]
+# frozen_string_literal: true
+
+class ArticlesController < OpenReadController
+  before_action :set_article, only: %i[update destroy]
 
   # GET /articles
   def index
@@ -10,15 +12,15 @@ class ArticlesController < ApplicationController
 
   # GET /articles/1
   def show
-    render json: @article
+    render json: Article.find(params[:id])
   end
 
   # POST /articles
   def create
-    @article = Article.new(article_params)
+    @article = current_user.articles.build(article_params)
 
     if @article.save
-      render json: @article, status: :created, location: @article
+      render json: @article, status: :created
     else
       render json: @article.errors, status: :unprocessable_entity
     end
@@ -36,16 +38,19 @@ class ArticlesController < ApplicationController
   # DELETE /articles/1
   def destroy
     @article.destroy
+
+    head :no_content
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_article
-      @article = Article.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_article
+    @article = current_user.article.find(params[:id])
+  end
 
-    # Only allow a trusted parameter "white list" through.
-    def article_params
-      params.require(:article).permit(:description, :size, :color)
-    end
+  # Only allow a trusted parameter "white list" through.
+  def article_params
+    params.require(:article).permit(:description, :size, :color)
+  end
+
+  private :set_article, :article_params
 end
