@@ -44,7 +44,7 @@ class ArticlesController < OpenReadController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_article
-    @article = current_user.article.find(params[:id])
+    @article = current_user.articles.find(params[:id])
   end
 
   # Only allow a trusted parameter "white list" through.
