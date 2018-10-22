@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ArticlesController < OpenReadController
+class ArticlesController < ProtectedController
   before_action :set_article, only: %i[update destroy]
 
   # GET /articles
