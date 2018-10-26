@@ -5,14 +5,14 @@ class ArticlesController < ProtectedController
 
   # GET /articles
   def index
-    @articles = Article.all
+    @articles = current_user.articles.all
 
     render json: @articles
   end
 
   # GET /articles/1
   def show
-    render json: Article.find(params[:id])
+    render json: current_user.articles.find(params[:id])
   end
 
   # POST /articles
